@@ -1,12 +1,12 @@
 import './App.css'
 import { Image, Alert, Button, Container, Row, Col, Form, Table, Stack } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
-const axios = require('axios')
 
-const App = () => {
+export default function App() {
   const [description, setDescription] = useState('')
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<{ id: number; description: string }[]>([])
 
   useEffect(() => {
     // todo
@@ -161,5 +161,3 @@ const App = () => {
     </div>
   )
 }
-
-export default App

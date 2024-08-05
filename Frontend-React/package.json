@@ -10,7 +10,6 @@
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
     "cross-env": "^7.0.3",
-    "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
@@ -24,6 +23,9 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "rules": {
+      "semi": "warn"
+    },
     "extends": [
       "react-app",
       "react-app/jest"
@@ -42,6 +44,10 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.1.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "prettier": "^2.8.3"
   },
   "jest": {
