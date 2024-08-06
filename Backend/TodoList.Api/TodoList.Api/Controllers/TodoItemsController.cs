@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,12 +25,7 @@ namespace TodoList.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            List<TodoItem> list = [
-                new() {
-                    Id = Guid.NewGuid(),
-                    Description = "Test",
-                    IsCompleted = false
-                }];
+            var list = await _context.TodoItems.ToListAsync();
             return Ok(list);
         }
 
@@ -77,7 +71,7 @@ namespace TodoList.Api.Controllers
             }
 
             return NoContent();
-        } 
+        }
 
         // POST: api/TodoItems 
         [HttpPost]
@@ -90,13 +84,13 @@ namespace TodoList.Api.Controllers
             else if (TodoItemDescriptionExists(todoItem.Description))
             {
                 return BadRequest("Description already exists");
-            } 
+            }
 
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
-             
+
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
-        } 
+        }
 
         private bool TodoItemIdExists(Guid id)
         {

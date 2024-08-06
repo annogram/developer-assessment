@@ -44,7 +44,7 @@ export const EntryList: FC<EntryListProps> = ({
 
   console.log(descriptions);
   return <>
-    <Row>
+    <Row className="b-0 rounded-0">
       <Col xs={12} className="justify-content-center">
         <h1>Showing {items.length} Item(s)</h1>
       </Col>
@@ -56,11 +56,11 @@ export const EntryList: FC<EntryListProps> = ({
       return (
         <Row key={id}>
           <Col>
-            <InputGroup aria-label="Todo Item">
+            <InputGroup className="b-0 rounded-0" aria-label="Todo Item">
               <InputGroup.Checkbox 
                 id={id} 
                 checked={item.isCompleted} 
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {onCheckItemChanged(item, e.target.checked)}}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {onCheckItemChanged(item, !item.isCompleted)}}
               />
               <Form.Control 
                 id={id} 
