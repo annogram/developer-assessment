@@ -1,14 +1,9 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { EntryList, EntryListProps } from "../../todo-list/components/entry-list";
 
-// mock queryClient using jest
-jest.mock("@tanstack/react-query", () => ({
-  ...jest.requireActual("@tanstack/react-query"),
-  useQuery: () => ({ data: [] }),
-}));
+
 
 describe("EntryList", () => {
   const mockOnDescriptionUpdated = jest.fn();
@@ -83,7 +78,7 @@ describe("EntryList", () => {
     jest.useRealTimers();
   });
 
-  it("makes the background color of the input dirty when before debounce", async () => {
+  it("makes the background color of the input dirty before debounce", async () => {
     const user = userEvent.setup();
     render(<EntryList {...defaultProps} />);
     const input = screen.getByDisplayValue("Test Todo 1");

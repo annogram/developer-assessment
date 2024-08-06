@@ -1,14 +1,8 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { CreateEntry, CreateEntryProps } from "../../todo-list/components/create-entry";
 
-// mock the queryClient
-jest.mock("@tanstack/react-query", () => ({
-  ...jest.requireActual("@tanstack/react-query"),
-  useQueryClient: jest.fn(),
-}));
 
 describe("CreateEntry", () => {
   const mockOnCreate = jest.fn();
