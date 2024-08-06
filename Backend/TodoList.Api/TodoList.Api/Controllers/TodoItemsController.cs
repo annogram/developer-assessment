@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TodoList.Api.DBContext;
 
 namespace TodoList.Api.Controllers
 {
@@ -22,10 +24,10 @@ namespace TodoList.Api.Controllers
 
         // GET: api/TodoItems
         [HttpGet]
-        public async Task<IActionResult> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            var results = await _context.TodoItems.Where(x => !x.IsCompleted).ToListAsync();
-            return Ok(results);
+            var list = await _context.TodoItems.ToListAsync();
+            return Ok(list);
         }
 
         // GET: api/TodoItems/...
@@ -44,7 +46,7 @@ namespace TodoList.Api.Controllers
 
         // PUT: api/TodoItems/... 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(Guid id, TodoItem todoItem)
+        public async Task<IActionResult> PutTodoItem([FromRoute] Guid id, [FromBody] TodoItem todoItem)
         {
             if (id != todoItem.Id)
             {
@@ -70,7 +72,7 @@ namespace TodoList.Api.Controllers
             }
 
             return NoContent();
-        } 
+        }
 
         // POST: api/TodoItems 
         [HttpPost]
@@ -83,13 +85,21 @@ namespace TodoList.Api.Controllers
             else if (TodoItemDescriptionExists(todoItem.Description))
             {
                 return BadRequest("Description already exists");
-            } 
+            }
 
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
-             
+
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
-        } 
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem([FromRoute] TodoItem todoItem)
+        {
+            _context.TodoItems.Remove(todoItem);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
         private bool TodoItemIdExists(Guid id)
         {
