@@ -92,6 +92,14 @@ namespace TodoList.Api.Controllers
             return CreatedAtAction(nameof(GetTodoItem), new { id = todoItem.Id }, todoItem);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem([FromRoute] TodoItem todoItem)
+        {
+            _context.TodoItems.Remove(todoItem);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         private bool TodoItemIdExists(Guid id)
         {
             return _context.TodoItems.Any(x => x.Id == id);

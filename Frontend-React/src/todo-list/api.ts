@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { MutationOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Todo } from "./types/entry";
 import axios from "axios";
 
@@ -20,7 +20,7 @@ export const useGetEntries = () => {
     });
 }
 
-export const useUpdateEntryMutation = () => {
+export const useUpdateEntryMutation = (options?: MutationOptions<void, Error, Todo>) => {
     const queryClient = useQueryClient();
     return useMutation<void, Error, Todo>({
         mutationKey: todoListQueryKeys.entries,
@@ -34,12 +34,27 @@ export const useUpdateEntryMutation = () => {
     })
 }
 
-export const useCreateEntryMutation = () => {
+export const useCreateEntryMutation = (options?: MutationOptions<Todo, Error, Pick<Todo, 'description' | 'isCompleted'>>) => {
     const queryClient = useQueryClient();
-    return useMutation<void, Error, Pick<Todo, 'description' | 'isCompleted'>>({
+    return useMutation<Todo, Error, Pick<Todo, 'description' | 'isCompleted'>>({
         mutationKey: todoListQueryKeys.entries,
         mutationFn: async (todo) => {
-            await axios.post<Todo>(API_URL, todo);
+            const response = await axios.post<Todo>(API_URL, todo);
+            return response.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: todoListQueryKeys.entries });
+        }
+    })
+}
+
+export const useDeleteEntryMutation = (options?: MutationOptions<void, Error, string>) => {
+    const queryClient = useQueryClient();
+    return useMutation<void, Error, string>({
+        mutationKey: todoListQueryKeys.entries,
+        mutationFn: async (id) => {
+            const url = `${API_URL}/${id}`;
+            await axios.delete(url);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: todoListQueryKeys.entries });

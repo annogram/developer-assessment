@@ -1,17 +1,21 @@
 import './App.css'
-import { Image, Alert, Button, Container, Row, Col, Form, Stack } from 'react-bootstrap'
-import { useState, useEffect } from 'react'
+import { Image, Container, Row, Col } from 'react-bootstrap'
 import { EntryList } from './todo-list/components/entry-list'
-import { useCreateEntryMutation, useGetEntries, useUpdateEntryMutation } from './todo-list/api'
+import {
+  useCreateEntryMutation,
+  useDeleteEntryMutation,
+  useGetEntries,
+  useUpdateEntryMutation
+} from './todo-list/api'
 import { Todo } from './todo-list/types/entry'
 import { CreateEntry } from './todo-list/components/create-entry'
 
 
 export default function App() {
-  const [description, setDescription] = useState('')
   const entries = useGetEntries()
-  const { mutate: updateEntry, isPending } = useUpdateEntryMutation()
+  const { mutate: updateEntry } = useUpdateEntryMutation()
   const { mutate: createEntry } = useCreateEntryMutation()
+  const { mutate: deleteEntry } = useDeleteEntryMutation()
   const handleDescriptionUpdated = (item: Todo, description: string) => {
     updateEntry({ ...item, description })
   }
@@ -27,14 +31,15 @@ export default function App() {
             <Image src="clearPointLogo.png" fluid rounded />
           </Col>
         </Row>
-       
+
 
         <br />
 
-        <EntryList 
+        <EntryList
           items={entries.data ?? []}
-          handleDescriptionUpdated={handleDescriptionUpdated}
+          onDescriptionUpdated={handleDescriptionUpdated}
           onCheckItemChanged={handleCheckChanged}
+          onDeleteItem={deleteEntry}
         />
         <CreateEntry onCreate={createEntry} />
 

@@ -1,18 +1,20 @@
 import { FC, useEffect, useState } from "react";
-import { Row, Col, InputGroup, Form } from "react-bootstrap";
+import { Row, Col, InputGroup, Form, Button } from "react-bootstrap";
 import { Todo } from "../types/entry";
 import { useDebouncedCallback } from "use-debounce";
 
 export interface EntryListProps {
   items: Todo[];
-  handleDescriptionUpdated: (item: Todo, description: string) => void;
+  onDescriptionUpdated: (item: Todo, description: string) => void;
   onCheckItemChanged: (item: Todo, completed: boolean) => void;
+  onDeleteItem: (id: string) => void;
 }
 
 export const EntryList: FC<EntryListProps> = ({
   items,
-  handleDescriptionUpdated,
-  onCheckItemChanged
+  onDescriptionUpdated,
+  onCheckItemChanged,
+  onDeleteItem
 }) => {
   
   const [descriptions, setDescriptions] = useState<Record<string, string>>(items.reduce((acc, item) => {
@@ -21,7 +23,7 @@ export const EntryList: FC<EntryListProps> = ({
   }, {} as Record<string, string>));
 
   const debouncedDescriptionUpdate = useDebouncedCallback((item: Todo) => {  
-    handleDescriptionUpdated(item, descriptions[item.id]);
+    onDescriptionUpdated(item, descriptions[item.id]);
   }, 1500);
 
 
@@ -60,13 +62,14 @@ export const EntryList: FC<EntryListProps> = ({
               <InputGroup.Checkbox 
                 id={id} 
                 checked={item.isCompleted} 
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {onCheckItemChanged(item, !item.isCompleted)}}
+                onChange={() => {onCheckItemChanged(item, !item.isCompleted)}}
               />
               <Form.Control 
                 id={id} 
                 value={description} 
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleLiveDescriptionUpdated(item, e.target.value)} 
               />
+              <Button variant="danger" onClick={() => onDeleteItem(id)}>x</Button>
             </InputGroup>
           </Col>
         </Row>
