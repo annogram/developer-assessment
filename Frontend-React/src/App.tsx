@@ -1,9 +1,8 @@
 import './App.css'
-import { Image, Alert, Button, Container, Row, Col, Form, Table, Stack } from 'react-bootstrap'
-import React, { useState, useEffect } from 'react'
+import { Image, Alert, Button, Container, Row, Col, Form, Stack } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
 import { EntryList } from './todo-list/components/entry-list'
 import { useGetEntries, useUpdateEntryMutation } from './todo-list/api'
-import { useDebouncedCallback } from 'use-debounce'
 import { Todo } from './todo-list/types/entry'
 
 
@@ -12,9 +11,9 @@ export default function App() {
   const entries = useGetEntries()
   const { mutate, isPending } = useUpdateEntryMutation()
 
-  const handleDescriptionUpdated = useDebouncedCallback((item: Todo, description: string) => {
+  const handleDescriptionUpdated = (item: Todo, description: string) => {
     mutate({ ...item, description })
-  }, 1500)
+  }
 
   const handleCheckChanged = (item: Todo, isCompleted: boolean) => mutate({ ...item, isCompleted })
 
