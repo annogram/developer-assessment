@@ -4,15 +4,15 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { store } from './store/store'
-import { Provider } from 'react-redux'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
 const root = createRoot(document.getElementById('root')!)
+const queryClient = new QueryClient();
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </Provider>
+    </QueryClientProvider>
   </React.StrictMode>
 )
 
