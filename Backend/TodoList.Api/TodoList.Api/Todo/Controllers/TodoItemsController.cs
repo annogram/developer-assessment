@@ -9,7 +9,7 @@ using TodoList.Application.IoC.Commands;
 using TodoList.Application.IoC.Queries;
 using TodoList.Domain;
 
-namespace TodoList.Api.Controllers;
+namespace TodoList.Api.Todo.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -52,6 +52,13 @@ public class TodoItemsController(
             return BadRequest();
         }
 
+        var maybeExisting = (await mediator.Send(new GetTodoItemsQuery { Items = [id] })).ToList();
+
+        if (maybeExisting is { Count: 0 })
+        {
+            return BadRequest("Item doesn't exist");
+        }
+
         await mediator.Send(new UpdateTodoItemCommand { Item = todoItem });
 
         return NoContent();
@@ -68,12 +75,23 @@ public class TodoItemsController(
 
         var id = await mediator.Send(new CreateTodoItemCommand { Item = todoItem });
 
-        return CreatedAtAction(nameof(GetTodoItem), new { id }, todoItem);
+        return CreatedAtAction(nameof(GetTodoItem), new { id }, new TodoItem
+        {
+            Description = todoItem.Description,
+            IsCompleted = todoItem.IsCompleted,
+            Id = id
+        });
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTodoItem([FromRoute] Guid id)
     {
+        var maybeExists = (await mediator.Send(new GetTodoItemsQuery { Items = [id] })).ToList();
+        
+        if(maybeExists is { Count: 0 })
+        {
+            return NotFound($"Cannot find item with id {id} to delete");
+        }
         await mediator.Send(new DeleteTodoItemCommand { Item = id });
         return Ok();
     }

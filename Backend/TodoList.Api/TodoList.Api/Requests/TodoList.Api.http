@@ -1,5 +1,16 @@
 ﻿@entryid=bb1b4def-3bcf-4b2f-9cf4-43a9655f3316
 
+GET {{HostAddress}}/api/todoitems
+
+###
+
+
+GET {{HostAddress}}/api/todoitems{{entryId}}
+
+###
+
+
+
 PUT {{HostAddress}}/api/todoitems/{{entryid}}
 Content-Type: application/json
 
@@ -9,5 +20,19 @@ Content-Type: application/json
   "isCompleted": true
 
 }
+
+###
+
+POST {{HostAddress}}/api/todoitems
+Content-Type: application/json
+
+{
+  "description": "test",
+  "isCompleted": true
+}
+
+###
+
+DELETE {{HostAddress}}/api/todoitems/{{entryid}}
 
 ###
