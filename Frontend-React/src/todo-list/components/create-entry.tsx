@@ -1,6 +1,6 @@
 import { FC, useRef } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
-import { Todo } from "../types/entry";
+import type { Todo } from "../types/entry";
 
 export interface CreateEntryProps {
     onCreate: (todo: Pick<Todo, 'description' | 'isCompleted'>) => void;

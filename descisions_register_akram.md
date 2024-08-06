@@ -16,3 +16,10 @@
  - add delete button to remove entries
  - enter keypress on tasks to add
  - do not allow empty tasks
+
+ ## Backend
+
+ - use mediator for clean architecture
+ - update to use the webapplication builder instead of webhostbuilder with setup
+ - top level commands in program
+ - prefer .http files over swagger
