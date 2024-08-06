@@ -19,7 +19,7 @@ export const CreateEntry: FC<CreateEntryProps> = ({ onCreate }) => {
                     }
                 }}/>
                 <Button variant="primary" onClick={() => {
-                    if (inputRef.current) {
+                    if (inputRef.current && inputRef.current.value) {
                         onCreate({ description: inputRef.current.value, isCompleted: false});
                         inputRef.current.value = "";
                     }
