@@ -17,20 +17,20 @@ export const EntryList: FC<EntryListProps> = ({
   onDeleteItem
 }) => {
   
-  const [descriptions, setDescriptions] = useState<Record<string, string>>(items.reduce((acc, item) => {
-    acc[item.id] = item.description;
+  const [descriptions, setDescriptions] = useState<Record<string, [string, boolean]>>(items.reduce((acc, item) => {
+    acc[item.id] = [item.description, false];
     return acc;
-  }, {} as Record<string, string>));
+  }, {} as Record<string, [string, boolean]>));
 
   const debouncedDescriptionUpdate = useDebouncedCallback((item: Todo) => {  
-    onDescriptionUpdated(item, descriptions[item.id]);
+    onDescriptionUpdated(item, descriptions[item.id][0]);
   }, 1500);
 
 
   const handleLiveDescriptionUpdated = (item: Todo, description: string) => {
     setDescriptions((prevDescriptions) => ({
       ...prevDescriptions,
-      [item.id]: description
+      [item.id]: [description, true]
     }));
 
     debouncedDescriptionUpdate(item);
@@ -39,9 +39,9 @@ export const EntryList: FC<EntryListProps> = ({
   // for initial render to allow for live updating
   useEffect(() => {
     setDescriptions(items.reduce((acc, item) => {
-      acc[item.id] = item.description;
+      acc[item.id] = [item.description, false];
       return acc;
-    }, {} as Record<string, string>));
+    }, {} as Record<string, [string, boolean]>));
   }, [items, setDescriptions]);
 
   console.log(descriptions);
@@ -66,7 +66,8 @@ export const EntryList: FC<EntryListProps> = ({
               />
               <Form.Control 
                 id={id} 
-                value={description} 
+                value={description[0]} 
+                className={description[1] ? 'bg-light' : ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleLiveDescriptionUpdated(item, e.target.value)} 
               />
               <Button variant="danger" onClick={() => onDeleteItem(id)}>x</Button>

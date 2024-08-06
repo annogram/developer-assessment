@@ -22,7 +22,6 @@ export default function App() {
 
   const handleCheckChanged = (item: Todo, isCompleted: boolean) => updateEntry({ ...item, isCompleted })
 
-  console.log(entries)
   return (
     <div className="App">
       <Container fluid>

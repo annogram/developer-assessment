@@ -82,4 +82,12 @@ describe("EntryList", () => {
     
     jest.useRealTimers();
   });
+
+  it("makes the background color of the input dirty when before debounce", async () => {
+    const user = userEvent.setup();
+    render(<EntryList {...defaultProps} />);
+    const input = screen.getByDisplayValue("Test Todo 1");
+    await user.type(input, " and more");
+    expect(input).toHaveClass("bg-light");
+  });
 });
