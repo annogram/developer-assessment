@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type { Todo } from "./types/entry";
 import axios from "axios";
 
@@ -6,6 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 export const todoListQueryKeys = {
     entries: ['entries'] as const,
+    entry: (id: string) => ['entries', id] as const
 }
 
 export const useGetEntries = () => {
@@ -17,4 +18,13 @@ export const useGetEntries = () => {
             return response.data;
         }
     });
+}
+
+export const useUpdateEntryMutation = () => {
+    return useMutation<void, Error, Todo>({
+        mutationFn: async (todo) => {
+            const url = `${API_URL}/${todo.id}`;
+            await axios.put<Todo>(url, todo);
+        }
+    })
 }

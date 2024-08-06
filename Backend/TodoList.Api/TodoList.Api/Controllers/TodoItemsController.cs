@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,10 +24,15 @@ namespace TodoList.Api.Controllers
 
         // GET: api/TodoItems
         [HttpGet]
-        public async Task<IActionResult> GetTodoItems()
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            var results = await _context.TodoItems.Where(x => !x.IsCompleted).ToListAsync();
-            return Ok(results);
+            List<TodoItem> list = [
+                new() {
+                    Id = Guid.NewGuid(),
+                    Description = "Test",
+                    IsCompleted = false
+                }];
+            return Ok(list);
         }
 
         // GET: api/TodoItems/...
@@ -44,7 +51,7 @@ namespace TodoList.Api.Controllers
 
         // PUT: api/TodoItems/... 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(Guid id, TodoItem todoItem)
+        public async Task<IActionResult> PutTodoItem([FromRoute] Guid id, [FromBody] TodoItem todoItem)
         {
             if (id != todoItem.Id)
             {

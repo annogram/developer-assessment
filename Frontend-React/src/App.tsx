@@ -1,10 +1,23 @@
 import './App.css'
 import { Image, Alert, Button, Container, Row, Col, Form, Table, Stack } from 'react-bootstrap'
 import React, { useState, useEffect } from 'react'
+import { EntryList } from './todo-list/components/entry-list'
+import { useGetEntries, useUpdateEntryMutation } from './todo-list/api'
+import { useDebouncedCallback } from 'use-debounce'
+import { Todo } from './todo-list/types/entry'
 
 
 export default function App() {
   const [description, setDescription] = useState('')
+  const entries = useGetEntries()
+  const { mutate, isPending } = useUpdateEntryMutation()
+
+  const handleDescriptionUpdated = useDebouncedCallback((item: Todo, description: string) => {
+    mutate({ ...item, description })
+  }, 1500)
+
+  const handleCheckChanged = (item: Todo, isCompleted: boolean) => mutate({ ...item, isCompleted })
+
   const [items, setItems] = useState<{ id: number; description: string }[]>([])
 
   useEffect(() => {
@@ -42,42 +55,6 @@ export default function App() {
     )
   }
 
-  const renderTodoItemsContent = () => {
-    return (
-      <>
-        <h1>
-          Showing {items.length} Item(s){' '}
-          <Button variant="primary" className="pull-right" onClick={() => getItems()}>
-            Refresh
-          </Button>
-        </h1>
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.description}</td>
-                <td>
-                  <Button variant="warning" size="sm" onClick={() => handleMarkAsComplete(item)}>
-                    Mark as completed
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </>
-    )
-  }
-
   const handleDescriptionChange = (event) => {
     // todo
   }
@@ -112,7 +89,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Container>
+      <Container fluid>
         <Row>
           <Col>
             <Image src="clearPointLogo.png" fluid rounded />
@@ -144,10 +121,16 @@ export default function App() {
         <Row>
           <Col>{renderAddTodoItemContent()}</Col>
         </Row>
+
         <br />
-        <Row>
-          <Col>{renderTodoItemsContent()}</Col>
-        </Row>
+
+        <EntryList 
+          items={entries.data ?? []}
+          handleDescriptionUpdated={handleDescriptionUpdated}
+          onCheckItemChanged={handleCheckChanged}
+        />
+
+
       </Container>
       <footer className="page-footer font-small teal pt-4">
         <div className="footer-copyright text-center py-3">

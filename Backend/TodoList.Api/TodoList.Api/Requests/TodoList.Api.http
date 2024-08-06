@@ -1,0 +1,13 @@
+﻿@entryid=bb1b4def-3bcf-4b2f-9cf4-43a9655f3316
+
+PUT {{HostAddress}}/api/todoitems/{{entryid}}
+Content-Type: application/json
+
+{
+  "id": "bb1b4def-3bcf-4b2f-9cf4-43a9655f3316",
+  "description": "test",
+  "isCompleted": true
+
+}
+
+###
