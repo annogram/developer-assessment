@@ -23,3 +23,4 @@
  - update to use the webapplication builder instead of webhostbuilder with setup
  - top level commands in program
  - prefer .http files over swagger
+ - use mapster for domain model mapping
