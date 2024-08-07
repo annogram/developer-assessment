@@ -28,6 +28,7 @@ export const EntryList: FC<EntryListProps> = ({
 
 
   const handleLiveDescriptionUpdated = (item: Todo, description: string) => {
+    if(item.isCompleted) return;
     setDescriptions((prevDescriptions) => ({
       ...prevDescriptions,
       [item.id]: [description, true]
@@ -64,7 +65,8 @@ export const EntryList: FC<EntryListProps> = ({
                 onChange={() => {onCheckItemChanged(item, !item.isCompleted)}}
               />
               <Form.Control 
-                id={id} 
+                id={id}
+                disabled={item.isCompleted}
                 value={description[0]} 
                 className={description[1] ? 'bg-light' : ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleLiveDescriptionUpdated(item, e.target.value)} 

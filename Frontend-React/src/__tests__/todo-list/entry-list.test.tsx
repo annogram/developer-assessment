@@ -85,4 +85,12 @@ describe("EntryList", () => {
     await user.type(input, " and more");
     expect(input).toHaveClass("bg-light");
   });
+
+  it('does not allow updating completed items', async () => {
+    const user = userEvent.setup();
+    render(<EntryList {...defaultProps} />);
+    const input = screen.getByDisplayValue("Test Todo 2");
+    await user.type(input, " and more");
+    expect(input).toHaveValue("Test Todo 2");
+  });
 });
