@@ -24,7 +24,8 @@ public static class TodoListApplication
     {
         services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped)
             .AddValidatorsFromAssemblyContaining<UpdateTodoItemValidator>()
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(AuditBehavior<,>));
 
         var configuration = new TodoListApplicationConfiguration();
 

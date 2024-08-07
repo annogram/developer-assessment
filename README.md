@@ -34,6 +34,7 @@ We look forward to seeing your submission and have fun!
 2. from the root directory run `docker compose -f "compose.yaml" up --build`
 3. This will run the backend and front-end project and build a network for them to connect
     - check the logs, it may take a while for the front-end project to spin up
+    - ensure nothing is running on 3000 or 5000
 4. This exposes port :3000 as well so you can launch the front-end from your local machine
 
 ## Functionality
