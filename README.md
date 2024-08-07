@@ -25,3 +25,24 @@ You are welcome to use comments in the code to outline any assumptions you might
 Once completed please push the completed solution to your own repo and send us the link.
 <br/><br/>
 We look forward to seeing your submission and have fun!
+
+# Akrams rundown
+
+## How to run this project
+
+1. Run npm install in the Frontend-react project to install dependencies
+2. from the root directory run `docker compose -f "compose.yaml" -d --build`
+3. This will run the backend and front-end project and build a network for them to connect
+    - check the logs, it may take a while for the front-end project to spin up
+4. This exposes port :3000 as well so you can launch the front-end from your local machine
+
+## Functionality
+
+1. Automatically saving log
+    - As long as the server is running items are persisted to the in-memory database, you can safely leave the page and come back
+2. Seamless task updates. No need to save modified tasks they will automatically persist after 1500 milliseconds
+3. Seamless addition. Adding new things right where you need them
+4. Buttonless. Adding new items can be done with the enter key
+
+![end-result](image.png)
+

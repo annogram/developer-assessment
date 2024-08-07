@@ -3,7 +3,7 @@ using System.Data;
 using TodoList.Application.TodoList.Ports;
 using TodoList.Domain;
 
-namespace TodoList.Application.IoC.Commands;
+namespace TodoList.Application.TodoList.Commands;
 
 public readonly record struct UpdateTodoItemCommand : ICommand
 {

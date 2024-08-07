@@ -44,7 +44,6 @@ export const EntryList: FC<EntryListProps> = ({
     }, {} as Record<string, [string, boolean]>));
   }, [items, setDescriptions]);
 
-  console.log(descriptions);
   return <>
     <Row className="b-0 rounded-0">
       <Col xs={12} className="justify-content-center">
