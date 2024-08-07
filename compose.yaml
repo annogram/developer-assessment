@@ -1,0 +1,39 @@
+services:
+  backend:
+    build:
+      context: ./Backend/TodoList.Api
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+    command: dotnet TodoList.Api.dll
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - app-network
+
+  frontend:
+    image: node:lts-slim
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api/todoitems
+    depends_on:
+      backend:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - ./Frontend-React:/app
+    command: npm start
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,9 +1,8 @@
 ﻿using Mediator;
-using System.Data;
 using TodoList.Application.TodoList.Ports;
 using TodoList.Domain;
 
-namespace TodoList.Application.IoC.Commands;
+namespace TodoList.Application.TodoList.Commands;
 
 public readonly record struct UpdateTodoItemCommand : ICommand
 {
@@ -15,15 +14,8 @@ public sealed class UpdateTodoItemCommandHandler(
 {
     public async ValueTask<Unit> Handle(UpdateTodoItemCommand command, CancellationToken cancellationToken)
     {
-        try
-        {
-            await repository.UpdateItem(command.Item);
-        }
-        catch (DBConcurrencyException)
-        {
+        await repository.UpdateItem(command.Item);
 
-            throw;
-        }
         return Unit.Value;
     }
 }

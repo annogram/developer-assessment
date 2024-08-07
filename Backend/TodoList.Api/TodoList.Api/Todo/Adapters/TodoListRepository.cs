@@ -44,8 +44,10 @@ public class TodoListRepository(
 
     public async Task UpdateItem(TodoItem item)
     {
+        var existingEntry = dbContext.TodoItems.Find(item.Id) ?? throw new InvalidOperationException("Item not found");
         var record = mapper.Map<TodoItemRecord>(item);
-        dbContext.Entry(record).State = EntityState.Modified;
+        
+        dbContext.Entry(existingEntry).CurrentValues.SetValues(record);
         await dbContext.SaveChangesAsync();
 
     }

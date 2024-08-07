@@ -1,6 +1,6 @@
 import { MutationOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Todo } from "./types/entry";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -20,26 +20,42 @@ export const useGetEntries = () => {
     });
 }
 
-export const useUpdateEntryMutation = (options?: MutationOptions<void, Error, Todo>) => {
+export const useUpdateEntryMutation = (options?: MutationOptions<void, AxiosError<string>, Todo>) => {
     const queryClient = useQueryClient();
-    return useMutation<void, Error, Todo>({
+    return useMutation<void, AxiosError<string>, Todo>({
         mutationKey: todoListQueryKeys.entries,
         mutationFn: async (todo) => {
             const url = `${API_URL}/${todo.id}`;
-            await axios.put<Todo>(url, todo);
+            try {
+                await axios.put<Todo>(url, todo);
+            } catch (error ) {
+                const axiosError = error as AxiosError<string>;
+                axiosError.response.data = axiosError.response?.data.replace(/\r|\n/g, '<br />');
+                throw axiosError;
+            }
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: todoListQueryKeys.entries });
+        },
+        onError: (error) => {
+            console.error(error);
         }
     })
 }
 
-export const useCreateEntryMutation = (options?: MutationOptions<Todo, Error, Pick<Todo, 'description' | 'isCompleted'>>) => {
+export const useCreateEntryMutation = (options?: MutationOptions<Todo, AxiosError<string>, Pick<Todo, 'description' | 'isCompleted'>>) => {
     const queryClient = useQueryClient();
-    return useMutation<Todo, Error, Pick<Todo, 'description' | 'isCompleted'>>({
+    return useMutation<Todo, AxiosError<string>, Pick<Todo, 'description' | 'isCompleted'>>({
         mutationKey: todoListQueryKeys.entries,
         mutationFn: async (todo) => {
-            const response = await axios.post<Todo>(API_URL, todo);
+            let response;
+            try {
+                response = await axios.post<Todo>(API_URL, todo);
+            } catch (error) {
+                const axiosError = error as AxiosError<string>;
+                axiosError.response.data = axiosError.response?.data.replace(/\r|\n/g, '<br />');
+                throw axiosError;
+            }
             return response.data;
         },
         onSuccess: () => {

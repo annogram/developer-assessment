@@ -1,5 +1,4 @@
-import './App.css'
-import { Image, Container, Row, Col } from 'react-bootstrap'
+import { Image, Container, Row, Col, Alert } from 'react-bootstrap'
 import { EntryList } from './todo-list/components/entry-list'
 import {
   useCreateEntryMutation,
@@ -13,8 +12,8 @@ import { CreateEntry } from './todo-list/components/create-entry'
 
 export default function App() {
   const entries = useGetEntries()
-  const { mutate: updateEntry } = useUpdateEntryMutation()
-  const { mutate: createEntry } = useCreateEntryMutation()
+  const { mutate: updateEntry, error: updateError, isError: updateIsError } = useUpdateEntryMutation()
+  const { mutate: createEntry, error: createError, isError: createIsError } = useCreateEntryMutation()
   const { mutate: deleteEntry } = useDeleteEntryMutation()
   const handleDescriptionUpdated = (item: Todo, description: string) => {
     updateEntry({ ...item, description })
@@ -31,7 +30,13 @@ export default function App() {
           </Col>
         </Row>
 
+        <Row>
+          <Col>
+            {updateIsError && <Alert variant="danger"><code dangerouslySetInnerHTML={{ __html: updateError?.response.data }} /></Alert>}
+            {createIsError && <Alert variant="danger"><code dangerouslySetInnerHTML={{ __html: createError?.response.data }} /></Alert>}
 
+          </Col>
+        </Row>
         <br />
 
         <EntryList

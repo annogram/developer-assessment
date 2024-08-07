@@ -1,7 +1,7 @@
 ﻿using Mediator;
 using TodoList.Application.TodoList.Ports;
 
-namespace TodoList.Application.IoC.Commands;
+namespace TodoList.Application.TodoList.Commands;
 
 public readonly record struct DeleteTodoItemCommand : ICommand
 {

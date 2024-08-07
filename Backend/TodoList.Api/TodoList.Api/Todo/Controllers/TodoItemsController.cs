@@ -1,12 +1,13 @@
-﻿using Mediator;
+﻿using FluentValidation;
+using Mediator;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TodoList.Application.IoC.Commands;
-using TodoList.Application.IoC.Queries;
+using TodoList.Application.TodoList.Commands;
+using TodoList.Application.TodoList.Queries;
 using TodoList.Domain;
 
 namespace TodoList.Api.Todo.Controllers;
@@ -59,7 +60,14 @@ public class TodoItemsController(
             return BadRequest("Item doesn't exist");
         }
 
-        await mediator.Send(new UpdateTodoItemCommand { Item = todoItem });
+        try
+        {
+            await mediator.Send(new UpdateTodoItemCommand { Item = todoItem });
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
         return NoContent();
     }
@@ -72,8 +80,18 @@ public class TodoItemsController(
         {
             return BadRequest("Description is required");
         }
+        Guid id;
+        try
+        {
+            id = await mediator.Send(new CreateTodoItemCommand { Item = todoItem });
 
-        var id = await mediator.Send(new CreateTodoItemCommand { Item = todoItem });
+        }
+        catch (ValidationException ex)
+        {
+
+            return BadRequest(ex.Message);
+        }
+
 
         return CreatedAtAction(nameof(GetTodoItem), new { id }, new TodoItem
         {
@@ -87,8 +105,8 @@ public class TodoItemsController(
     public async Task<IActionResult> DeleteTodoItem([FromRoute] Guid id)
     {
         var maybeExists = (await mediator.Send(new GetTodoItemsQuery { Items = [id] })).ToList();
-        
-        if(maybeExists is { Count: 0 })
+
+        if (maybeExists is { Count: 0 })
         {
             return NotFound($"Cannot find item with id {id} to delete");
         }

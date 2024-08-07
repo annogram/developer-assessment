@@ -21,7 +21,8 @@ builder.Services
         policy.AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader()))
-    .AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoItemsDB"));
+    .AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoItemsDB"))
+    .AddHealthChecks();
 
 builder.Services.AddHealthChecks();
 builder.Services.AddControllers();
@@ -46,7 +47,8 @@ app.UseRouting()
     .UseHttpsRedirection()
     .UseCors(allowedOriginsKey)
     .UseAuthorization()
-    .UseEndpoints(endpoints => endpoints.MapControllers());
+    .UseEndpoints(endpoints => endpoints.MapControllers())
+    .UseHealthChecks("/healthcheck");
 
 await app.RunAsync();
 
