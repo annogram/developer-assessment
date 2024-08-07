@@ -36,6 +36,7 @@ We look forward to seeing your submission and have fun!
     - check the logs, it may take a while for the front-end project to spin up
     - ensure nothing is running on 3000 or 5000
 4. This exposes port :3000 as well so you can launch the front-end from your local machine
+    - [here you go](http://localhost:3000)
 
 ## Functionality
 
@@ -46,4 +47,6 @@ We look forward to seeing your submission and have fun!
 4. Buttonless. Adding new items can be done with the enter key
 
 ![end-result](image.png)
+
+Checkout the [Descision register](descisions_register_akram.md) for choices I've made on this journey
 

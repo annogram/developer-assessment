@@ -16,6 +16,7 @@
  - add delete button to remove entries
  - enter keypress on tasks to add
  - do not allow empty tasks
+ - Using fluent assertion descriptions for error messaging in the front-end
 
  ## Backend
 
@@ -24,3 +25,9 @@
  - top level commands in program
  - prefer .http files over swagger
  - use mapster for domain model mapping
+ - Added fluent validation and mediator pipeline behaviors to handle validation
+ - added Audit behavior as an example to show that every command and query could be audited if one so desired
+ - Added autofixture for testing
+ - Added fluent assertions for testing
+ - Added moq for testing
+ - Only testing relevant important functionality (mostly)
