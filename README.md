@@ -37,6 +37,31 @@ We look forward to seeing your submission and have fun!
     - ensure nothing is running on 3000 or 5000
 4. This exposes port :3000 as well so you can launch the front-end from your local machine
     - [here you go](http://localhost:3000)
+5. If you have other things on your machine running on these ports they'll interfere so feel free to modify the `compose.yaml` for your needs
+
+```yaml
+services:
+  backend:
+    build:
+      context: ./Backend/TodoList.Api
+    ports:
+      - "5000:5000" <============
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000 <=============
+    command: dotnet TodoList.Api.dll
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/healthcheck"] <=========
+...
+
+ frontend:
+    image: node:lts-slim
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api/todoitems <=========
+```
 
 ## Functionality
 
