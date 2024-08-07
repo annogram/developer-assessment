@@ -9,7 +9,7 @@ public readonly record struct GetTodoItemsQuery : IQuery<IEnumerable<TodoItem>>
     public IEnumerable<Guid>? Items { get; init; }
 }
 
-public sealed class GetAllTodoItemsQueryHandler(
+public sealed class GetTodoItemsQueryHandler(
     ITodoListRepository todoListRepository) : IQueryHandler<GetTodoItemsQuery, IEnumerable<TodoItem>>
 {
     public async ValueTask<IEnumerable<TodoItem>> Handle(GetTodoItemsQuery query, CancellationToken cancellationToken)
