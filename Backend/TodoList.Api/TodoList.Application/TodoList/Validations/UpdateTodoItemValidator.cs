@@ -11,10 +11,10 @@ public class UpdateTodoItemValidator : AbstractValidator<UpdateTodoItemCommand>
     {
         RuleFor(x => x.Item).NotNull();
         RuleFor(x => x.Item.Description).NotEmpty().WithMessage("Cannot update to empty item");
-        RuleFor(x => x.Item.Description).MustAsync(async (description, cancellationToken) =>
+        RuleFor(x => x.Item).MustAsync(async (item, cancellationToken) =>
         {
             var items = await todoListRepository.GetAllItems();
-            return items.All(x => x.Description != description);
+            return items.Where(w => w.Id != item.Id).All(x => x.Description != item.Description);
         }).WithMessage("Item with this description already exists");
 
     }

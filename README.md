@@ -31,7 +31,7 @@ We look forward to seeing your submission and have fun!
 ## How to run this project
 
 1. Run npm install in the Frontend-react project to install dependencies
-2. from the root directory run `docker compose -f "compose.yaml" -d --build`
+2. from the root directory run `docker compose -f "compose.yaml" up --build`
 3. This will run the backend and front-end project and build a network for them to connect
     - check the logs, it may take a while for the front-end project to spin up
 4. This exposes port :3000 as well so you can launch the front-end from your local machine
