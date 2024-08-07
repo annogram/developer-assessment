@@ -12,4 +12,5 @@ RUN dotnet publish "TodoList.Api.csproj" -c Release -o /app/publish /p:UseAppHos
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN apt-get update && apt-get install -y curl
 ENTRYPOINT ["dotnet", "TodoList.Api.dll"]
